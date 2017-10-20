@@ -33,26 +33,58 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for contribution guidelines.
 
 (TODO: fill this out with details about your project. Suggested ideas: architecture diagram, schema, and any other details from your app plan that sound interesting.)
 
+Objective 1: update songs per playlist id 
+
 ## API's
 
 ### /songs
-> request:
-
-
-> response:
-{
-flux: {/*% increase/decrease*/}
-
-}
 ### /genres
-> request:
-
-> response: 
 ### /users 
 > request:
 
+{
+  'id': string,
+  'version': 'v_' + Number,
+  'part': { 
+    'statistics': bool,
+    'time': {
+      
+    },
+    'relational': {
+      'included': bool,
+      'type': String,
+      'time': {
+        
+      }
+    }
+  }
+}
+'type' = ['songs', 'genres', 'users']
+
 > response:
-add / update
+
+{ 
+  flux: {
+   trend: Number,
+   
+  },
+  relations: {
+    influence: Number /*0->1*/,
+    type: {
+      songs: [
+        {
+          id
+          relation: '',
+          
+        }
+      ],
+      genres: [ditto], 
+      playlist: [ditto],
+      users: [ditto],
+    }
+  },
+}
+
 
  
 
