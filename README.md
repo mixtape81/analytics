@@ -44,23 +44,23 @@ Objective 1: update songs per playlist id
 > request:
 
 {
-  'id': string,
-  'metricCategory': STRING /*optional*/,
+  'id': string /*default: none*/,
+  'metricCategory': STRING /*default: none*/,
   'version': 'v_' + NUMBER,
   'part': { 
-    'statistics': BOOL,
+    'statistics': BOOL /*default: 'true'*/,
     'history': {
-      scale: NUMBER /*0 - 10, 0=recent, 10=alldata*/, 
-      start:'DD/MM/YYY',
-      end:'DD/MM/YYYY',
+      'scale': NUMBER /*0 - 10, 0=recent(default), 10=alldata*/, 
+      'start':'DD/MM/YYY'/*default: none*/,
+      'end':'DD/MM/YYYY/*default: none*/',
     },
     'relational': {
-      'included': BOOL,
-      'type': ARRAY /*['songs', 'genres', 'users']*/,
+      'included': BOOL/*default: false*/,
+      'type': ARRAY /*['songs', 'genres', 'users'] default: each*/,
       'history': {
-        scale: NUMBER /*0 - 10, 0=recent, 10=alldata(dump)*/, 
-        start:'DD/MM/YYY',
-        end:'DD/MM/YYYY'
+        'scale': NUMBER /*0 - 10, 0=recent(default), 10=alldata(dump)*/, 
+        'start':'DD/MM/YYY' /*default: none*/,
+        'end':'DD/MM/YYYY /*defaut: none*/'
       }
     }
   }
