@@ -45,10 +45,11 @@ Objective 1: update songs per playlist id
 
 {
   'id': string,
+  'metricCategory': STRING /*optional*/,
   'version': 'v_' + NUMBER,
   'part': { 
     'statistics': BOOL,
-    'time': {
+    'history': {
       scale: NUMBER /*0 - 10, 0=recent, 10=alldata*/, 
       start:'DD/MM/YYY',
       end:'DD/MM/YYYY',
@@ -56,8 +57,8 @@ Objective 1: update songs per playlist id
     'relational': {
       'included': BOOL,
       'type': ARRAY /*['songs', 'genres', 'users']*/,
-      'time': {
-        scale: NUMBER /*0 - 10, 0=recent, 10=alldata*/, 
+      'history': {
+        scale: NUMBER /*0 - 10, 0=recent, 10=alldata(dump)*/, 
         start:'DD/MM/YYY',
         end:'DD/MM/YYYY'
       }
@@ -74,10 +75,11 @@ Objective 1: update songs per playlist id
     'week': NUMBER,
     'days': ARRAY
   },
-  relations: {
-    significance: Number /*0->1*/,
-    type: {
-      songs: [
+  'history': ARRAY,
+  'relations': {
+    'significance': Number /*0->1*/,
+    'type': {
+      'songs': [
         {
           'songId': NUMBER,
           'relationId: NUMBER,
@@ -90,9 +92,9 @@ Objective 1: update songs per playlist id
           }
         }
       ],
-      genres: [ditto], 
-      playlist: [ditto],
-      users: [ditto]
+      'genres': [ditto], 
+      'playlist': [ditto],
+      'users': [ditto]
     }
   }
 }
