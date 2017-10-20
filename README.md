@@ -39,43 +39,53 @@ Objective 1: update songs per playlist id
 
 ### /songs
 ### /genres
+### /playlistID
 ### /users 
 > request:
 
 {
   'id': string,
-  'version': 'v_' + Number,
+  'version': 'v_' + NUMBER,
   'part': { 
-    'statistics': bool,
+    'statistics': BOOL,
     'time': {
-      
+      scale: NUMBER /*0 - 10, 0=recent, 10=alldata*/, 
+      start:'DD/MM/YYY',
+      end:'DD/MM/YYYY',
     },
     'relational': {
-      'included': bool,
-      'type': String,
+      'included': BOOL,
+      'type': ARRAY /*['songs', 'genres', 'users']*/,
       'time': {
-        
+        scale: NUMBER /*0 - 10, 0=recent, 10=alldata*/, 
+        start:'DD/MM/YYY',
+        end:'DD/MM/YYYY'
       }
     }
   }
 }
-'type' = ['songs', 'genres', 'users']
 
 > response:
 
-{ 
-  flux: {
-   trend: Number,
-   
+{
+  'increase': {
+    'data': OBJECT, 
+    'day': NUMBER,
+    'week': NUMBER,
+    'days': ARRAY
   },
   relations: {
-    influence: Number /*0->1*/,
+    significance: Number /*0->1*/,
     type: {
       songs: [
         {
-          id
-          relation: '',
-          
+          'songId': NUMBER,
+          'relationId: NUMBER,
+          'genre': STRING,
+          'popularity': NUMBER,
+          'trend': {
+            'increase': NUMBER /*+-*/, 
+          }
         }
       ],
       genres: [ditto], 
