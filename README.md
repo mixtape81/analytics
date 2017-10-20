@@ -33,3 +33,26 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for contribution guidelines.
 
 (TODO: fill this out with details about your project. Suggested ideas: architecture diagram, schema, and any other details from your app plan that sound interesting.)
 
+## API's
+
+### /songs
+> request:
+
+
+> response:
+{
+flux: {/*% increase/decrease*/}
+
+}
+### /genres
+> request:
+
+> response: 
+### /users 
+> request:
+
+> response:
+add / update
+
+ 
+
