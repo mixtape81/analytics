@@ -84,15 +84,17 @@ Objective 1: update songs per playlist id
           'genre': STRING,
           'popularity': NUMBER,
           'trend': {
-            'increase': NUMBER /*+-*/, 
+            'increase': NUMBER /*+-*/,
+            'metricCategory': STRING,
+            'metrics': OBJECT
           }
         }
       ],
       genres: [ditto], 
       playlist: [ditto],
-      users: [ditto],
+      users: [ditto]
     }
-  },
+  }
 }
 
 
