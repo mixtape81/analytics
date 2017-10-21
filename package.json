@@ -19,6 +19,8 @@
   "homepage": "https://github.com/austinreuter/hrsf81-thesis#readme",
   "dependencies": {
     "axios": "^0.16.2",
+    "babel-eslint": "^8.0.1",
+    "babel-loader": "^7.1.2",
     "body-parser": "^1.18.2",
     "express": "^4.16.2",
     "lodash": "^4.17.4",

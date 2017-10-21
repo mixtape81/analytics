@@ -5,7 +5,7 @@ const bodyParser = require('body-parser');
 
 //require db;
 
-app.use(bodyParser.json({limit: '200mb'}));
+app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
 //('/playlistviews')''
