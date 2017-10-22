@@ -38,3 +38,6 @@ bower_components/
 
 # package-lock 
 package-lock.json
+
+# database config
+db/config.js

@@ -4,7 +4,6 @@ const app = express();
 const bodyParser = require('body-parser');
 
 //require db;
-
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
@@ -16,6 +15,8 @@ app.use('/', (req, res) => {
 
 //[{playlist_id: 1}, {playlist_id: 2}]
 
+
 app.listen(PORT, () => {
 	console.log(`listening on port ${PORT}`);
 });
+
