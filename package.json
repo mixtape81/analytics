@@ -4,7 +4,7 @@
   "description": "The project description",
   "main": ".eslintrc.js",
   "scripts": {
-    "test": "mocha",
+    "test": "node node_modules/.bin/mocha",
     "start": "nodemon server/index.js --open",
     "postinstall": "node postinstall.js",
     "schema": "node db/schema.js"
