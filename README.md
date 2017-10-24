@@ -42,7 +42,7 @@ Objective 1: update songs per playlist id
 ### /playlistID
 ### /users 
 > request:
-
+```
 {
   'id': string /*default: none*/,
   'metricCategory': STRING /*default: none*/,
@@ -65,9 +65,9 @@ Objective 1: update songs per playlist id
     }
   }
 }
-
+```
 > response:
-
+```
 {
   'increase': {
     'data': OBJECT, 
@@ -98,7 +98,7 @@ Objective 1: update songs per playlist id
     }
   }
 }
-
+```
 
  
 
