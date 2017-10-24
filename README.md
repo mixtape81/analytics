@@ -36,7 +36,8 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for contribution guidelines.
 Objective 1: update songs per playlist id 
 
 ## SCHEMAS
-** pl_daily_views **
+**pl_daily_views**
+
 |field name    |field type                                    |
 |--------------|----------------------------------------------|
 |id            |integer, auto increasing                      |
@@ -49,10 +50,11 @@ Objective 1: update songs per playlist id
 
 ## API's
 
-** /songs **
-** /genres  **
-** /playlistID  **
-** /users **
+**/songs**
+**/genres**
+**/playlistID**
+**/users**
+
 > request:
 ```
 {
