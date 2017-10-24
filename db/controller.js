@@ -5,7 +5,7 @@ module.exports.savePlaylists = function(processedPlaylists) {
   var saved = [];
     //check if there is a playlist with no views;
     //save time stamp for the day;
-  for (var playlist_id in processedPlaylists) {
+  for (let playlist_id in processedPlaylists) {
     let playlist = processedPlaylists[playlist_id];
  
     pl_daily_views.query({where: {playlist_id: playlist_id, parent_id: null}})
