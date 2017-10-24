@@ -1,5 +1,7 @@
 const { pl_daily_views } = require('./models.js');
 const Promise = require('bluebird');
+const config = require('./config.js')
+const knex = require('knex')(config);
 
 module.exports.savePlaylists = function(processedPlaylists) {
   var saved = [];
@@ -14,7 +16,7 @@ module.exports.savePlaylists = function(processedPlaylists) {
     for (let playlist_id in processedPlaylists) {
       let playlist = processedPlaylists[playlist_id];
    
-      pl_daily_views.query({where: {playlist_id: playlist_id, parent_id: null}});
+      pl_daily_views.query({where: {playlist_id: playlist_id, parent_id: null}})
       .fetch()
       .then((result) => {
         if (result) {
@@ -23,14 +25,18 @@ module.exports.savePlaylists = function(processedPlaylists) {
             parent_id: parent_id,
             playlist_id: playlist_id,
             views: playlist.views,
-            genre_id: playlist.genre_id
+            genre_id: playlist.genre_id,
+            created_at: knex.fn.now(),
+            updated_at: knex.fn.now()
           }).save()
         } else {
           return pl_daily_views.forge({
             parent_id: null,
             playlist_id: playlist_id,
             views: playlist.views,
-            genre_id: playlist.genre_id
+            genre_id: playlist.genre_id,
+            created_at: knex.fn.now(),
+            updated_at: knex.fn.now()
           }).save();
         } 
       })
