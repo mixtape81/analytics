@@ -11,21 +11,36 @@ const { expect } = require ('chai');
 const { describe, it, before, beforeEach } = require('mocha');
 const request = require('request');
 const Promise = require('bluebird');
-
+const _ = require('lodash');
 
 var playlistsToSave = condensePlaylists(incomingPlaylists);
 // example value of playlistsToSave (key => playlist_id)
   // { 1: { views: 1, genre_id: 1 }, 2: { views: 3, genre_id: 1 } }
 
+describe('condensePlaylists', function() {
+  it('should reduce the correct number of playlists', function() {
+    var incomingPlaylists = [
+      {playlist_id: 2, genre_id: 1},
+      {playlist_id: 1, genre_id: 1},
+      {playlist_id: 2, genre_id: 1}
+    ];
+    var condensedCount = 0;
+    var condensedPlaylists = condensePlaylists(incomingPlaylists);
+    for (var i in condensedPlaylists) {
+      condensedCount++
+    }
+    expect(condensedCount).to.equal(2);
+  });
+});
+
 describe('/addPlaylist', function() {
   beforeEach(function(done) {
-    //return new Promise((resolve, reject) => {
     knex.schema.dropTableIfExists('pl_daily_views')
     .then(() => createTables())
     .then(() => done()); 
   });
   
-  it('should save playlists to pl_daily_views', function(done) {
+  it('should handle asynchronous saves to pl_daily_views', function(done) {
     pl_daily_views.forge({
       parent_id: null,
       playlist_id: 1,
@@ -42,10 +57,16 @@ describe('/addPlaylist', function() {
       return pl_daily_views.forge().fetchAll()
     })
     .then((result) => {
-      //console.log(result)
+      var incomingCount = 1; //one for initial saved playlist
+      var savedCount = 0;
+      _.forEach(playlistsToSave, () => {
+        incomingCount++;
+      })
       result.models.forEach(model => {
-        console.log(model.attributes)
+        savedCount++;
       });
+      expect(incomingCount).to.equal(savedCount);
+
       done();
     })
   })

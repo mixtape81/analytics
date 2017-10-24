@@ -1,4 +1,5 @@
 module.exports.condensePlaylists = function(playlists) {
+  //adds up all the playlists of the same id
   return playlists.reduce((results, playlist) => {
     var id = playlist.playlist_id;
     if (results[id]) { 
