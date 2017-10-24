@@ -1,4 +1,3 @@
-//grab knex, bookshelf, models, schema
 const config = require('../config.js');
 const knex = require('knex')(config);
 const bookshelf = require('bookshelf')(knex);

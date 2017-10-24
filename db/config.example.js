@@ -1,3 +1,5 @@
+//in psql, run 'create database spotifyanalytics'
+
 module.exports = {
 	client: 'pg',
 	version: '7.6',

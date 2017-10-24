@@ -2,7 +2,7 @@ const config = require('./config.js');
 let knex = require('knex')(config);
 let bookshelf = require('bookshelf')(knex);
 
-const extensions = [
+const pldvExtension = [
   {
   	tableName: 'pl_daily_views',
   }, {
@@ -13,10 +13,10 @@ const extensions = [
   			}
   		}).fetchAll();
   	},
-  	grabAllPlaylists: function() {
+  	grabAllHistory: function() {
   		return this.forge().fetchAll();
   	}
   }
 ];
 
-module.exports.pl_daily_views = bookshelf.Model.extend(...extensions);
+module.exports.pl_daily_views = bookshelf.Model.extend(...pldvExtension);
