@@ -6,29 +6,33 @@ const { pl_daily_views: dailyViews } = require('../db/models.js');
 const { condensePlaylists } = require('./helpers.js');
 const { savePlaylists } = require('../db/controller.js');
 const Promise = require('bluebird');
+const dummy = require('./dummyData.js');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
-app.use('/', (req, res) => {
+app.get('/', (req, res) => {
   console.log('hello');
 });
 
-app.get('userinteractions/playlistviews', (req, res) => {
+
+//run this every day, request from user interactions
+app.get('/playlistviews', (req, res) => {
 	//chunk process ?
 	//save incoming playlists 
-  
-	new Promise((resolve, reject) => {
-    return req.body
+	new Promise((resolve) => {
+    //return req.body
+    return resolve(dummy);
 	})
-	.then((incomingPlaylists) => {
-    return condensePlaylists(incomingPlaylists);
+	.then((incoming) => {
+		console.log(incoming)
+    return condensePlaylists(incoming.incomingPlaylists);
 	}) 
 	.then((playlistsToSave) => {
     return savePlaylists(playlistsToSave);
 	})
-	.then(() => resolve(), () => reject());
-
+  .then(() => res.json('successfully saved condensed playlists'))
+  .catch((err) => console.log('error saving condensed playlists', err))
 });
 
 
