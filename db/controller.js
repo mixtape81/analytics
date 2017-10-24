@@ -19,7 +19,7 @@ module.exports.savePlaylists = function(processedPlaylists) {
     for (let playlist_id in processedPlaylists) {
       let playlist = processedPlaylists[playlist_id];
    
-      pl_daily_views.query({where: {playlist_id: playlist_id, parent_id: null}})
+      pl_daily_views.query({where: {playlist_id: playlist_id, parent_id: null}});
       .fetch()
       .then((result) => {
         if (result) {
@@ -36,18 +36,18 @@ module.exports.savePlaylists = function(processedPlaylists) {
             playlist_id: playlist_id,
             views: playlist.views,
             genre_id: playlist.genre_id
-          }).save()
+          }).save();
         } 
       })
       .then((results) => {
         saved.push(results);
       })
       .then(() => {
-        currentPlaylist++
+        currentPlaylist++;
       })
       .then(() => {
         if (currentPlaylist === totalPlaylists) {
-          resolve(saved)
+          resolve(saved);
         }
       })
     }
