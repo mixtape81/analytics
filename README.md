@@ -35,12 +35,24 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for contribution guidelines.
 
 Objective 1: update songs per playlist id 
 
+## SCHEMAS
+** pl_daily_views **
+|field name    |field type                                    |
+|--------------|----------------------------------------------|
+|id            |integer, auto increasing                      |
+|parent_id     |integer, references id                        |
+|playlist_id   |integer                                       |
+|views         |integer                                       | 
+|genre_id      |integer                                       | 
+|created_at    |integer                                       |
+|updated_at    |string                                        |
+
 ## API's
 
-### /songs
-### /genres
-### /playlistID
-### /users 
+** /songs **
+** /genres  **
+** /playlistID  **
+** /users **
 > request:
 ```
 {
