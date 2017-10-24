@@ -9,9 +9,11 @@ const { incomingPlaylists } = require('../server/dummyData.js');
 
 const { expect } = require ('chai');
 const { describe, it, before, beforeEach } = require('mocha');
-const request = require('request');
+const request = require('supertest');
 const Promise = require('bluebird');
 const _ = require('lodash');
+const { listening } = require('../server/index.js');
+
 
 var playlistsToSave = condensePlaylists(incomingPlaylists);
 // example value of playlistsToSave (key => playlist_id)
@@ -71,4 +73,10 @@ describe('/addPlaylist', function() {
     })
   })
 
+  it('should save to pl_daily_views on /playlistviews', function(done) {
+    request(listening)
+    .get('/playlistviews')
+    .expect(200, done)
+
+  });
 });

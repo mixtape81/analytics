@@ -32,7 +32,7 @@ app.get('/playlistviews', (req, res) => {
     return savePlaylists(playlistsToSave);
 	})
   .then(() => res.json('successfully saved condensed playlists'))
-  .catch((err) => console.log('error saving condensed playlists', err))
+  .catch((err) => res.json('error saving condensed playlists', err))
 });
 
 
@@ -43,7 +43,7 @@ app.get('/playlistviews', (req, res) => {
 
 */
 
-app.listen(PORT, () => {
+module.exports.listening = app.listen(PORT, () => {
 	console.log(`listening on port ${PORT}`);
 });
 
