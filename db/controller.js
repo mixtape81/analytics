@@ -1,11 +1,7 @@
 const { pl_daily_views } = require('./models.js');
 const Promise = require('bluebird');
 
-
-
-
 module.exports.savePlaylists = function(processedPlaylists) {
-
   var saved = [];
     //check if there is a playlist with no views;
     //save time stamp for the day;
@@ -14,7 +10,6 @@ module.exports.savePlaylists = function(processedPlaylists) {
   for (let i in processedPlaylists) {
     totalPlaylists++;
   }
-
   return new Promise((resolve, reject) => {
     for (let playlist_id in processedPlaylists) {
       let playlist = processedPlaylists[playlist_id];
