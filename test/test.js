@@ -4,12 +4,14 @@ const bookshelf = require('bookshelf')(knex);
 const { pl_daily_views } = require('../db/models.js');
 const createTables = require('../db/schema.js');
 const { savePlaylists } = require('../db/controller.js');
+
 const { condensePlaylists } = require('../server/helpers.js');
 const { incomingPlaylists } = require('../server/dummyData.js');
+const { listening } = require('../server/index.js');
 
 const { expect } = require ('chai');
 const { describe, it, before, beforeEach } = require('mocha');
-const request = require('request');
+const request = require('supertest');
 const Promise = require('bluebird');
 const _ = require('lodash');
 
@@ -26,9 +28,8 @@ describe('condensePlaylists', function() {
     ];
     var condensedCount = 0;
     var condensedPlaylists = condensePlaylists(incomingPlaylists);
-    for (var i in condensedPlaylists) {
-      condensedCount++
-    }
+    _.each(condensedPlaylists, () => condensedCount++);
+
     expect(condensedCount).to.equal(2);
   });
 });
@@ -36,39 +37,51 @@ describe('condensePlaylists', function() {
 describe('/addPlaylist', function() {
   beforeEach(function(done) {
     knex.schema.dropTableIfExists('pl_daily_views')
+    .then(() => knex.schema.dropTableIfExists('playlist_parent_id'))
     .then(() => createTables())
     .then(() => done()); 
   });
   
   it('should handle asynchronous saves to pl_daily_views', function(done) {
-    pl_daily_views.forge({
+    pl_daily_views.forge({ // initial saved playlist
       parent_id: null,
       playlist_id: 1,
       views: 10,
       genre_id: 1
-    }).save()
-
+    })
+    .save()
     .then(() => {
       return new Promise((resolve, reject) => {
-        resolve(savePlaylists(playlistsToSave))
+        resolve(savePlaylists(playlistsToSave));
       })
     })
     .then((result) => {
       return pl_daily_views.forge().fetchAll()
     })
     .then((result) => {
-      var incomingCount = 1; //one for initial saved playlist
+      var incomingCount = 1; // one for initial saved playlist
       var savedCount = 0;
-      _.forEach(playlistsToSave, () => {
-        incomingCount++;
-      })
-      result.models.forEach(model => {
-        savedCount++;
-      });
+      _.forEach(playlistsToSave, () => incomingCount++);
+      result.models.forEach(model => savedCount++);
       expect(incomingCount).to.equal(savedCount);
 
       done();
     })
   })
 
+  it('should save to pl_daily_views on get /playlistviews from userints', function(done) {
+    request(listening)
+    .get('/playlistviews')
+    .expect(200, done);
+
+  });
+});
+
+describe('/playlistHistory', function(done) {
+
+  it('should retrieve playlist history by Id', function() {
+    request(listening)
+    .get('/playlistHistory')
+    .expect(200, done)
+  })
 });
