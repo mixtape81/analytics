@@ -2,7 +2,7 @@ const PORT = process.env.PORT || 3000;
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
-const { pl_daily_views: dailyViews } = require('../db/models.js');
+const { pl_daily_views, playlist_parent_id } = require('../db/models.js');
 const { condensePlaylists } = require('./helpers.js');
 const { savePlaylists } = require('../db/controller.js');
 const Promise = require('bluebird');
@@ -16,7 +16,8 @@ app.get('/', (req, res) => {
 });
 
 
-//run this every day, request from user interactions
+// request from user interactions
+// to be ran every day 
 app.get('/playlistviews', (req, res) => {
 	//chunk process ?
 	//save incoming playlists 
@@ -25,7 +26,7 @@ app.get('/playlistviews', (req, res) => {
     return resolve(dummy);
 	})
 	.then((incoming) => {
-		console.log(incoming)
+		//console.log(incoming)
     return condensePlaylists(incoming.incomingPlaylists);
 	}) 
 	.then((playlistsToSave) => {
@@ -37,11 +38,21 @@ app.get('/playlistviews', (req, res) => {
 
 
 /*
-//*do genre specific playlists get more plays on a given week than mixed-genre playlists
-
+// *do genre specific playlists get more plays on a given week than mixed-genre playlists
+ 
 
 
 */
+app.get('/playlistHistory', (req, res) => {
+
+  //req.body.id
+  var id = 1;
+  pl_daily_views.playlistHistory(id)
+  .then((history) => {
+  	res.json(history)
+  });
+
+});
 
 module.exports.listening = app.listen(PORT, () => {
 	console.log(`listening on port ${PORT}`);

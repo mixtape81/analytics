@@ -13,9 +13,7 @@ module.exports = function() {
       table.integer('genre_id');
 			table.timestamps();
 		})
-		// .then(() => {
-		// 	return knex.schema.dropTable('playlist_parent_id')
-		// })
+
 		.then(() => {
 			return knex.schema.createTableIfNotExists('playlist_parent_id', function(table) {
 				table.increments();
