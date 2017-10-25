@@ -13,10 +13,21 @@ module.exports = function() {
       table.integer('genre_id');
 			table.timestamps();
 		})
+		// .then(() => {
+		// 	return knex.schema.dropTable('playlist_parent_id')
+		// })
+		.then(() => {
+			return knex.schema.createTableIfNotExists('playlist_parent_id', function(table) {
+				table.increments();
+				table.integer('playlist_id');
+				table.integer('parent_id');
+				table.timestamps();
+			})
+		})
 		.then((results) => {
-      resolve();
+      resolve(results);
 		}, (err) => {
-			console.log('error making pl_daily_views table', err);
+			console.log('error making tables', err);
 			reject();
 		})
   })
