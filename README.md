@@ -41,9 +41,34 @@ Objective 1: update songs per playlist id
 |field name    |field type                                    |
 |--------------|----------------------------------------------|
 |id            |integer, auto increasing                      |
-|parent_id     |integer, references id                        |
+|parent_id     |integer, references id  FK?                   |
 |playlist_id   |integer                                       |
 |views         |integer                                       | 
+|genre_id      |integer                                       | 
+|created_at    |integer                                       |
+|updated_at    |string                                        |
+
+**playlist_parent_id**
+
+|field name    |field type                                    |
+|--------------|----------------------------------------------|
+|id            |integer, auto increasing                      |
+|parent_id     |integer, references id     FK?                |
+|playlist_id   |integer                                       |
+|created_at    |integer                                       |
+|updated_at    |string                                        |
+
+> playlist has many songs
+**song_daily_views**
+
+|field name    |field type                                    |
+|--------------|----------------------------------------------|
+|id            |integer, auto increasing                      |
+|parent_id     |integer, references id FK?                    |
+|song_id       |integer                                       |
+|playlist_id   |integer  FK?                                  |
+|views         |integer                                       | 
+|viewRatio     |integer                                       | 
 |genre_id      |integer                                       | 
 |created_at    |integer                                       |
 |updated_at    |string                                        |
