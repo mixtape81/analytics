@@ -59,6 +59,7 @@ Objective 1: update songs per playlist id
 |updated_at    |string                                        |
 
 > playlist has many songs
+
 **song_daily_views**
 
 |field name    |field type                                    |
