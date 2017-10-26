@@ -27,11 +27,10 @@ module.exports.savePlaylists = function(processedPlaylists, time) {
           })
           .save()
           .then((resultToThrow) => {
-            playlist_id_metrics.query({where: {playlist_id: playlist_id}})
+            return playlist_id_metrics.query({where: {playlist_id: playlist_id}})
             .fetch()
             .then(result => {
-
-              playlist_id_metrics.updateParentWithPlaylist(playlist_id, playlist.views)
+              return playlist_id_metrics.updateParentWithPlaylist(playlist_id, playlist.views, time)
             })
             .then(() => {
               return resultToThrow;

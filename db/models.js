@@ -50,7 +50,7 @@ const pidmExtension = [
         console.log(err)
       });
     },
-    updateParentWithPlaylist: function(playlist_id, viewCount) {
+    updateParentWithPlaylist: function(playlist_id, viewCount, time) {
       return this.forge().query({
         where: {
           playlist_id: playlist_id
@@ -66,7 +66,8 @@ const pidmExtension = [
           .query({where: {id: id}})
           .save({
             totalPlaylistViewCount: currentViewCount + viewCount,
-            runningTotal: runningTotal + 1 
+            runningTotal: runningTotal + 1,
+            updated_at: time
           }, {patch: true})
           .catch(err => console.log(err))
       })
