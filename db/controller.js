@@ -1,14 +1,11 @@
-const { pl_daily_views, playlist_parent_id } = require('./models.js');
+const { pl_daily_views, playlist_id_metrics, song_daily_views } = require('./models.js');
 const Promise = require('bluebird');
 const config = require('./config.js')
 const knex = require('knex')(config);
 
-
-module.exports.savePlaylists = function(processedPlaylists) {
+module.exports.savePlaylists = function(processedPlaylists, time) {
+  console.log(time)
   var saved = [];
-  var trigger = false;
-    //check if there is a playlist with no views;
-    //save time stamp for the day;
   var totalPlaylists = 0;
   var currentPlaylist = 0;
   for (let i in processedPlaylists) {
@@ -17,34 +14,41 @@ module.exports.savePlaylists = function(processedPlaylists) {
   return new Promise((resolve, reject) => {
     for (let playlist_id in processedPlaylists) {
       let playlist = processedPlaylists[playlist_id];
-   
-      pl_daily_views.query({where: {playlist_id: playlist_id, parent_id: null}})
+      pl_daily_views.query({where: {playlist_id: playlist_id}})
       .fetch()
       .then((result) => {
         if (result) {
-          let parent_id = result.attributes.id;
           return pl_daily_views.forge({
-            parent_id: parent_id,
             playlist_id: playlist_id,
-            views: playlist.views,
             genre_id: playlist.genre_id,
-            created_at: knex.fn.now(),
-            updated_at: knex.fn.now()
-          }).save()
+            views: playlist.views,
+            created_at: time,
+            updated_at: time
+          })
+          .save()
+          .then((resultToThrow) => {
+            playlist_id_metrics.query({where: {playlist_id: playlist_id}})
+            .fetch()
+            .then(result => {
+
+              playlist_id_metrics.updateParentWithPlaylist(playlist_id, playlist.views)
+            })
+            .then(() => {
+              return resultToThrow;
+            })
+          })
         } else {
           return pl_daily_views.forge({
-            parent_id: null,
             playlist_id: playlist_id,
-            views: playlist.views,
             genre_id: playlist.genre_id,
-            created_at: knex.fn.now(),
-            updated_at: knex.fn.now()
-          }).save()
+            views: playlist.views,
+            created_at: time,
+            updated_at: time
+          })
+          .save()
           .then((results) => {
-            let idAsNull = results.attributes.id;
-            playlist_parent_id.saveToParentTable(playlist_id, idAsNull);
-
-            return results;
+            return playlist_id_metrics.saveToParentTable(playlist_id, playlist.genre_id, playlist.views, time)
+            .then(() => results)
           })
         } 
       })
@@ -62,4 +66,15 @@ module.exports.savePlaylists = function(processedPlaylists) {
       .catch(err => console.log(err))
     }
   })
+}
+
+module.exports.saveSongs = function(processedSongs, time) {
+
+  // update playlist with 
+    // total number of songs played
+    // total number of songs skipped
+  song_daily_views
+
+
+
 }
