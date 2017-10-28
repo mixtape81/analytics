@@ -18,38 +18,21 @@ module.exports.savePlaylists = function(processedPlaylists, time) {
       .fetch()
       .then((result) => {
         if (result) {
-          return pl_daily_views.forge({
-            playlist_id: playlist_id,
-            genre_id: playlist.genre_id,
-            views: playlist.views,
-            created_at: time,
-            updated_at: time
-          })
-          .save()
-          .then((resultToThrow) => {
-            return playlist_id_metrics.query({where: {playlist_id: playlist_id}})
-            .fetch()
-            .then(result => {
-              return playlist_id_metrics.updateParentWithPlaylist(playlist_id, playlist.views, time)
-            })
-            .then(() => {
-              return resultToThrow;
-            })
-          })
+          return playlist_id_metrics.updateParentWithPlaylist(playlist_id, playlist.views, time)
         } else {
-          return pl_daily_views.forge({
-            playlist_id: playlist_id,
-            genre_id: playlist.genre_id,
-            views: playlist.views,
-            created_at: time,
-            updated_at: time
-          })
-          .save()
-          .then((results) => {
-            return playlist_id_metrics.saveToParentTable(playlist_id, playlist.genre_id, playlist.views, time)
-            .then(() => results)
-          })
+          return playlist_id_metrics.saveToParentTable(playlist_id, playlist.genre_id, playlist.views, time)
         } 
+      })
+      .then(() => {
+        //save playlist
+        return pl_daily_views.forge({
+          playlist_id: playlist_id,
+          genre_id: playlist.genre_id,
+          views: playlist.views,
+          created_at: time,
+          updated_at: time
+        })
+        .save();
       })
       .then((results) => {
         saved.push(results);
@@ -59,6 +42,7 @@ module.exports.savePlaylists = function(processedPlaylists, time) {
       })
       .then(() => {
         if (currentPlaylist === totalPlaylists) {
+          console.log('playlists for time:', time, 'saved at:', new Date())
           resolve(saved);
         }
       })
@@ -72,6 +56,25 @@ module.exports.saveSongs = function(processedSongs, time) {
   // update playlist with 
     // total number of songs played
     // total number of songs skipped
+  var saved = [];
+  var totalSongs = 0;
+  var currentSong = 0;
+  for (let i in processedSongs) {
+    totalSongs++;
+  }
+
+  playlist_id_metrics.updateParentWithSong(playlist_id, playlist.genre_id, playlist.views, time)
+
+  /*return new Promise((resolve, reject) => {
+    for (let song_id in processedSongs) {
+      
+
+
+    }
+  })*/
+
+
+
   song_daily_views
 
 

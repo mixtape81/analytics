@@ -71,6 +71,30 @@ const pidmExtension = [
           }, {patch: true})
           .catch(err => console.log(err))
       })
+    },
+    updateParentWithSong: function(playlist_id, songViews, songSkips, time) {
+      return this.forge().query({
+        where: {
+          playlist_id: playlist_id
+        }
+      })
+      .fetch() 
+      .then(results => {
+        let id = results.attributes.playlist_id;
+        let totalSongViews = results.attributes.totalSongViews;
+        let totalSongSkips = results.attributes.totalSongSkips;
+        totalSongViews === null ? totalSongViews = 0 : null;
+        totalSongSkips === null ? totalSongSkips = 0 : null;
+
+        return this.forge()
+          .query({where: {id: id}})
+          .save({
+            totalSongViews: totalSongViews + songViews,
+            totalSongSkips: totalSongSkips + songSkips,
+            updated_at: time 
+          }, {patch: true})
+          .catch(err => console.log(err));
+      })
     }
   }
 ];
