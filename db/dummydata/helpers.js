@@ -1,6 +1,8 @@
+//playlist helpers
 module.exports.maximizeStack = 20000;
 
 module.exports.playlistNumber = 200;
+module.exports.songsPerPlaylist = 30;
 
 module.exports.TotalCycles = 2160; // hours: 2160
 
@@ -9,6 +11,10 @@ module.exports.dailyViewTotal = module.exports.TotalCycles * module.exports.play
 module.exports.maxSavesPerRound = 20000 / module.exports.playlistNumber;
 module.exports.timeoutPerSave = module.exports.maxSavesPerRound * module.exports.playlistNumber * 2.8; // milliseconds;
 
+/*
+* use above constants to manage stack size for repeated cycles of playlist saves
+*/
+
 
 module.exports.numAndHalfRandomizer = function(highest) {
   var num = Math.ceil(Math.random() * highest);
@@ -16,6 +22,7 @@ module.exports.numAndHalfRandomizer = function(highest) {
   return [num, halfNum];
 };
 
+// mock incoming songs
 module.exports.createDailyPlaylists = function (dailyViewTotal) {
   var results = [];
   for (var i = 0; i < dailyViewTotal; i++) {

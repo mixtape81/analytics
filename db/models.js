@@ -9,6 +9,18 @@ const songExtension = [
   }, {
     grabAllHistory: function() {
       return this.forge.fetchAll();
+    },
+    save: function(song_id, playlist_id, views, skips, genre_id, time) {
+      return this.forge({
+        song_id: song_id,
+        playlist_id: playlist_id,
+        views: views,
+        skips: skips,
+        genre_id: genre_id,
+        created_at: time,
+        updated_at: time
+      }).save()
+      .catch(err => console.log('error saving song:', err))
     }
   }
 ];
@@ -68,7 +80,9 @@ const pidmExtension = [
             totalPlaylistViewCount: currentViewCount + viewCount,
             runningTotal: runningTotal + 1,
             updated_at: time
-          }, {patch: true})
+          }, {
+            patch: true
+          })
           .catch(err => console.log(err))
       })
     },
@@ -92,7 +106,9 @@ const pidmExtension = [
             totalSongViews: totalSongViews + songViews,
             totalSongSkips: totalSongSkips + songSkips,
             updated_at: time 
-          }, {patch: true})
+          }, {
+            patch: true
+          })
           .catch(err => console.log(err));
       })
     }

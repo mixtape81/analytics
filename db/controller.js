@@ -51,32 +51,45 @@ module.exports.savePlaylists = function(processedPlaylists, time) {
   })
 }
 
-module.exports.saveSongs = function(processedSongs, time) {
-
-  // update playlist with 
-    // total number of songs played
-    // total number of songs skipped
-  var saved = [];
-  var totalSongs = 0;
-  var currentSong = 0;
-  for (let i in processedSongs) {
-    totalSongs++;
-  }
-
-  playlist_id_metrics.updateParentWithSong(playlist_id, playlist.genre_id, playlist.views, time)
-
-  /*return new Promise((resolve, reject) => {
-    for (let song_id in processedSongs) {
-      
 
 
-    }
-  })*/
+module.exports.saveSongs = function(songsToImport, time) {
 
+  return new Promise((resolve, reject) => {
+    resolve(songsToImport);
+  })
+  .tap(songsToImport => {
+    let playlistPromises = [];
+    songsToImport.forEach(playlist => {
 
+      var totalViews = 0;
+      var totalSkips = 0;
 
-  song_daily_views
+      var playlist_id = playlist.playlist_id;
+      playlist.songs.forEach(song => {
+        totalViews += song.views;
+        totalSkips += song.skips;
+      })
+      playlistPromises.push([playlist_id, totalViews, totalSkips, time])
+      //playlist_id_metrics.updateParentWithSong(playlist_id, songViews, songSkips, time)
+    })
+    
+    return Promise.all(playlistPromises)
+  })
+  .then((songsToImport) => {
+    //console.log('song', songsToImport[0])
 
+    let songPromises = [];
 
+    songsToImport.forEach(playlist => {
+      var playlist_id = playlist.playlist_id;
+      playlist.songs.forEach(song => {
+        songPromises.push([song.song_id, playlist_id, song.views, song.skips, song.genre_id, time])
+        //songPromises.push(song_daily_views.save(song.song_id, playlist_id, song.views, song.skips, song.genre_id, time))
+      })
 
+    })
+    console.log(songPromises)
+
+  })
 }

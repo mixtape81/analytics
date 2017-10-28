@@ -11,7 +11,7 @@ const { condensePlaylists } = require('../../server/helpers.js');
 let { incomingPlaylists, incomingSongs } = require('../../server/dummyData.js')
 
 
-module.exports = function(time) {
+module.exports.createAndSavePlaylists = function(time) {
 
   return new Promise((resolve, reject) => {
       // createTables()
@@ -27,5 +27,9 @@ module.exports = function(time) {
   })
 	.then((results) => console.log('finished saving playlist', time))
   .catch(err => reject(err)) 
+
+};
+
+module.exports.createAndSaveSongs = function(time) {
 
 };
