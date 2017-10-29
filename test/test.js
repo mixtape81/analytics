@@ -36,24 +36,25 @@ describe('condensePlaylists', function() {
 
 describe('/addPlaylist', function() {
   beforeEach(function(done) {
-    knex.schema.dropTableIfExists('pl_daily_views')
-    .then(() => knex.schema.dropTableIfExists('playlist_parent_id'))
+    knex.schema.dropTableIfExists('song_daily_views') 
+    .then(() => knex.schema.dropTableIfExists('playlist_id_metrics')) 
+    .then(() => knex.schema.dropTableIfExists('pl_daily_views'))
     .then(() => createTables())
     .then(() => done()); 
   });
   
   it('should handle asynchronous saves to pl_daily_views', function(done) {
     pl_daily_views.forge({ // initial saved playlist
-      parent_id: null,
       playlist_id: 1,
       views: 10,
-      genre_id: 1
     })
     .save()
     .then(() => {
-      return new Promise((resolve, reject) => {
-        resolve(savePlaylists(playlistsToSave));
-      })
+      return savePlaylists(playlistsToSave, new Date());
+    })
+    .then(() => {
+      return savePlaylists(playlistsToSave, new Date());
+      
     })
     .then((result) => {
       return pl_daily_views.forge().fetchAll()
@@ -61,10 +62,10 @@ describe('/addPlaylist', function() {
     .then((result) => {
       var incomingCount = 1; // one for initial saved playlist
       var savedCount = 0;
-      _.forEach(playlistsToSave, () => incomingCount++);
+      _.forEach(playlistsToSave, () => incomingCount+=2);
       result.models.forEach(model => savedCount++);
       expect(incomingCount).to.equal(savedCount);
-
+      
       done();
     })
   })
