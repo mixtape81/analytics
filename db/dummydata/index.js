@@ -6,7 +6,7 @@ const { numAndHalfRandomizer, createDailyPlaylists, dailyViewTotal } = require('
 const createTables = require('../schema.js');
 const Promise = require('bluebird');
 
-const { savePlaylists, condenseSongs } = require('../controller.js');
+const { savePlaylists, saveSongs } = require('../controller.js');
 const { condensePlaylists } = require('../../server/helpers.js');
 let { incomingPlaylists, incomingSongs } = require('../../server/dummyData.js')
 
@@ -14,10 +14,7 @@ let { incomingPlaylists, incomingSongs } = require('../../server/dummyData.js')
 module.exports.createAndSavePlaylists = function(time) {
 
   return new Promise((resolve, reject) => {
-      // createTables()
-      // .then(() => {
     resolve(createDailyPlaylists(dailyViewTotal))
-      // })
   })
   .then((results) => {
       return condensePlaylists(results);
@@ -27,7 +24,6 @@ module.exports.createAndSavePlaylists = function(time) {
   })
 	.then((results) => console.log('finished saving playlist', time))
   .catch(err => reject(err)) 
-
 };
 
 module.exports.createAndSaveSongs = function(time) {

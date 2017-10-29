@@ -97,8 +97,8 @@ const pidmExtension = [
         let id = results.attributes.playlist_id;
         let totalSongViews = results.attributes.totalSongViews;
         let totalSongSkips = results.attributes.totalSongSkips;
-        totalSongViews === null ? totalSongViews = 0 : null;
-        totalSongSkips === null ? totalSongSkips = 0 : null;
+        totalSongViews = totalSongViews ? totalSongViews : 0;
+        totalSongSkips = totalSongSkips ? totalSongSkips : 0;
 
         return this.forge()
           .query({where: {id: id}})

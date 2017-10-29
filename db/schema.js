@@ -28,7 +28,7 @@ module.exports = function() {
 		.then(() => {
       return knex.schema.createTableIfNotExists('song_daily_views', function(table) {
         table.increments().primary();
-        table.integer('song-id');
+        table.integer('song_id');
         table.integer('playlist_id').references('playlist_id_metrics.playlist_id');
         table.integer('views');
         table.integer('skips');
@@ -36,7 +36,6 @@ module.exports = function() {
         table.timestamps();
       })
     })
-
 		.then((results) => {
       resolve(results);
 		}, (err) => {

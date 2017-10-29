@@ -46,15 +46,13 @@ module.exports.savePlaylists = function(processedPlaylists, time) {
           resolve(saved);
         }
       })
-      .catch(err => console.log(err))
+      .catch(err => reject(err))
     }
   })
 }
 
-
-
 module.exports.saveSongs = function(songsToImport, time) {
-
+  console.log('fn invoked at', new Date());
   return new Promise((resolve, reject) => {
     resolve(songsToImport);
   })
@@ -62,34 +60,29 @@ module.exports.saveSongs = function(songsToImport, time) {
     let playlistPromises = [];
     songsToImport.forEach(playlist => {
 
-      var totalViews = 0;
-      var totalSkips = 0;
+      let totalViews = 0;
+      let totalSkips = 0;
 
-      var playlist_id = playlist.playlist_id;
       playlist.songs.forEach(song => {
         totalViews += song.views;
         totalSkips += song.skips;
       })
-      playlistPromises.push([playlist_id, totalViews, totalSkips, time])
-      //playlist_id_metrics.updateParentWithSong(playlist_id, songViews, songSkips, time)
-    })
-    
-    return Promise.all(playlistPromises)
+      playlist_id_metrics.updateParentWithSong(playlist.playlist_id, totalViews, totalSkips, time);
+    });
+    songsToImport = null; // minimize pointers
+    return Promise.all(playlistPromises);
   })
   .then((songsToImport) => {
-    //console.log('song', songsToImport[0])
-
     let songPromises = [];
 
     songsToImport.forEach(playlist => {
-      var playlist_id = playlist.playlist_id;
       playlist.songs.forEach(song => {
-        songPromises.push([song.song_id, playlist_id, song.views, song.skips, song.genre_id, time])
-        //songPromises.push(song_daily_views.save(song.song_id, playlist_id, song.views, song.skips, song.genre_id, time))
-      })
-
-    })
-    console.log(songPromises)
-
+        songPromises.push(song_daily_views.save(song.song_id, playlist.playlist_id, song.views, song.skips, song.genre_id, time));
+      });
+    });
+    songsToImport = null;
+    return Promise.all(songPromises);
   })
+  .then(results => console.log('saved at', new Date()))
+  .catch(err => reject(err));
 }
