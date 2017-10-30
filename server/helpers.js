@@ -12,3 +12,20 @@ module.exports.condensePlaylists = function(playlists) {
     return results;
   }, {});
 }
+
+
+module.exports.condenseSongs = function(songsByPlaylist) {
+  
+  var results = {};
+  
+  songsByPlaylist.forEach((playlistGroup) => {
+    let playlist_id = results[playlistGroup.playlist_id]
+    if (results[playlist_id]) {
+      console.log('hi')
+    } else {
+      results[playlist_id] = {};
+      
+    }
+  })
+
+}
