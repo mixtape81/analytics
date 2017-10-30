@@ -2,29 +2,30 @@ const config = require('../config.js');
 const knex = require('knex')(config);
 const bookshelf = require('bookshelf')(knex);
 const { pl_daily_views } = require('../models.js');
+const { numAndHalfRandomizer, createDailyPlaylists, dailyViewTotal } = require('./helpers.js');
 const createTables = require('../schema.js');
 const Promise = require('bluebird');
 
-const playlistIdTest = 2;
+const { savePlaylists, saveSongs } = require('../controller.js');
+const { condensePlaylists } = require('../../server/helpers.js');
+let { incomingPlaylists, incomingSongs } = require('../../server/dummyData.js')
 
-module.exports =  function() {
+
+module.exports.createAndSavePlaylists = function(time) {
 
   return new Promise((resolve, reject) => {
-  	knex.schema.dropTableIfExists('pl_daily_views')
-  	.then(() => createTables())
-  	.then(() => {
-      return pl_daily_views.forge({
-        parent_id: null,
-        playlist_id: playlistIdTest,
-        views: 10,
-        genre_id: 3
-      }).save();
-  	})
-  	.then(() => {
-  		return pl_daily_views.playlistHistory(playlistIdTest);
-  	})
-  	.then((results) => console.log(results))
-    .then(() => resolve(), (err) => reject(err));
-  });  
+    resolve(createDailyPlaylists(dailyViewTotal))
+  })
+  .then((results) => {
+      return condensePlaylists(results);
+  })
+  .then((results) => {
+    return savePlaylists(results, time)
+  })
+	.then((results) => console.log('finished saving playlist', time))
+  .catch(err => reject(err)) 
+};
+
+module.exports.createAndSaveSongs = function(time) {
 
 };
