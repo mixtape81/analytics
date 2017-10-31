@@ -8,7 +8,7 @@ const Promise = require('bluebird');
 
 const { savePlaylists, saveSongs } = require('../controller.js');
 const { condensePlaylists } = require('../../server/helpers.js');
-let { incomingPlaylists, incomingSongs } = require('../../server/dummyData.js')
+let { incomingPlaylists, incomingSongs } = require('../../server/dummyData.js');
 
 
 module.exports.createAndSavePlaylists = function(time) {
@@ -17,13 +17,13 @@ module.exports.createAndSavePlaylists = function(time) {
     resolve(createDailyPlaylists(dailyViewTotal))
   })
   .then((results) => {
-      return condensePlaylists(results);
+    return condensePlaylists(results);
   })
   .then((results) => {
-    return savePlaylists(results, time)
+    return savePlaylists(results, time);
   })
 	.then((results) => console.log('finished saving playlist', time))
-  .catch(err => reject(err)) 
+  .catch(err => reject(err));
 };
 
 module.exports.createAndSaveSongs = function(time) {

@@ -21,6 +21,14 @@ const songExtension = [
         updated_at: time
       }).save()
       .catch(err => console.log('error saving song:', err))
+    },
+    findLatestByPlaylist(playlist_id, limit = 30) {
+      return knex.raw( ` 
+        select * from song_daily_views 
+        where playlist_id = ? 
+        order by created_at 
+        desc limit ?;`, 
+        [playlist_id, limit]);
     }
   }
 ];

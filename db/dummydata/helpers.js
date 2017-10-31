@@ -24,7 +24,7 @@ module.exports.timeoutData = function(saveType = 'playlist') {
     maximizeStack = 20000
 	} else if (saveType === 'songs') {
 		savesPerCycle = 6000;
-		saveEfficiency = 0.35;
+		saveEfficiency = 0.37;
 		maximizeStack = 30000
 	}
 

@@ -7,7 +7,6 @@ let { TotalCycles, maxSavesPerRound, timeoutPerSave, timeoutData } = require('./
 let hour = 0;
 let multiplier = 1;
 
-
 // timeoutPerSave based on 50 playlists;
 function timeoutCollectionInt(collector, func) {
   setTimeout(function () {
