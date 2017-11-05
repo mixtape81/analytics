@@ -7,13 +7,10 @@ const { condensePlaylists } = require('./helpers.js');
 const { savePlaylists } = require('../db/controller.js');
 const Promise = require('bluebird');
 const dummy = require('./dummyData.js');
+let axios = require('axios');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
-
-app.get('/', (req, res) => {
-  console.log('hello');
-});
 
 // request from user interactions
 app.get('/playlistviews', (req, res) => {
@@ -39,6 +36,11 @@ app.get('/playlistHistory', (req, res) => {
   	res.json(history)
   });
 });
+
+app.get('/', () => {
+  axios.get('http://127.0.0.1:9200/')
+  .then((res) => console.log(res.body))
+})
 
 module.exports.listening = app.listen(PORT, () => {
 	console.log(`listening on port ${PORT}`);

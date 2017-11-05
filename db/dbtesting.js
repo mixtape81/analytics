@@ -1,17 +1,23 @@
 const config = require('./config.js');
 let knex = require('knex')(config);
 let bookshelf = require('bookshelf')(knex);
-let { song_daily_views } = require('./models.js');
+const { song_daily_views } = require('./models.js');
 const Promise = require('bluebird');
+const { testfile } = require('./constants.js');
+
+song_daily_views.copyByOrder('songs', testfile, 1, 0)
 
 
 
-song_daily_views.findLatestByPlaylist(30, 30).then((res) => console.log(res.rows))
-
-new Promise((resolve, reject) => resolve(song_daily_views.findLatestByPlaylist(30, 30)))
-  .then((results) => {
-   //console.log(results.rows);
-  })
+/*
+console.log(new Date())
+song_daily_views.orderBy('songs', 1, 999999)
+.then((res) => {
+  console.log(res.rows.length, 'orderByType', new Date())
+  console.log(res.rows[res.rows.length - 1])
+  //console.log(res.rows)
+})
+*/
 
 
 

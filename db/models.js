@@ -2,7 +2,6 @@ const config = require('./config.js');
 let knex = require('knex')(config);
 let bookshelf = require('bookshelf')(knex);
 
-
 const songExtension = [
   {
     tableName: 'song_daily_views'
@@ -20,15 +19,50 @@ const songExtension = [
         created_at: time,
         updated_at: time
       }).save()
-      .catch(err => console.log('error saving song:', err))
+      .catch(err => console.log('error saving song:', err));
     },
-    findLatestByPlaylist(playlist_id, limit = 30) {
+    historyByType(type = 'songs', id, limit = 30, offset = 0) { // set "limit" to null to find all
+      type === 'songs' ? type = 'song_id' : type = 'playlist_id';
       return knex.raw( ` 
-        select * from song_daily_views 
-        where playlist_id = ? 
-        order by created_at 
-        desc limit ?;`, 
-        [playlist_id, limit]);
+        select * 
+        from song_daily_views 
+        where ${type} = ? 
+        order by created_at desc 
+        limit ?
+        offset ?;`,
+        [id, limit, offset]
+      ).catch(err => console.log(err));
+    },
+    orderBy(type = 'songs', limit = null, offset = 0) {
+      if (type === 'playlists') {
+        type = 'playlist_id';
+      } else {
+        type = 'song_id';
+      }
+      return knex.raw(`
+        select * 
+        from song_daily_views
+        order by ${type}
+        limit ${limit}
+        offset ${offset};`
+      ).catch(err => console.log(err));
+    },
+    copyByOrder(type = 'songs', file, limit = null, offset = 0) {
+      if (type === 'playlists') {
+        type = 'playlist_id';
+      } else {
+        type = 'song_id';
+      }
+      return knex.raw(`
+        copy
+          (select * 
+          from song_daily_views
+          order by ${type}
+          limit ${limit}
+          offset ${offset})
+        to '${file}'
+        with csv delimiter ',';`
+      ).catch(err => console.log(err));
     }
   }
 ];
@@ -42,10 +76,11 @@ const pldvExtension = [
   			where: { 
   				playlist_id: playlistID
   			}
-  		}).fetchAll();
+  		}).fetchAll()
+      .catch(err => console.log(err));
   	},
   	grabAllHistory: function() {
-  		return this.forge().fetchAll();
+  		return this.forge().fetchAll().catch(err => console.log(err));
   	}
   }
 ];
