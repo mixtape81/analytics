@@ -31,7 +31,6 @@ function timeoutCollectionInt(collector, func) {
 }
 //timeoutCollectionInt(hour.toString(), createAndSavePlaylists);
 
-
 var songsToSave = createDailySongs();
 var timeoutinfo = timeoutData('songs');
 maxSavesPerRound = timeoutinfo.maxSavesPerRound;
@@ -58,21 +57,6 @@ function timeoutSongInt(collector, func, param) {
   }, timeoutPerSave);
 }
 //timeoutSongInt(hour.toString(), saveSongs, songsToSave)
-
-console.log(typeof testfile)
-song_daily_views.copyByOrder('songs', testfile, 1, 0)
-
-
-
-/*
-console.log(new Date())
-song_daily_views.orderBy('songs', 1, 999999)
-.then((res) => {
-  console.log(res.rows.length, 'orderByType', new Date())
-  console.log(res.rows[res.rows.length - 1])
-  //console.log(res.rows)
-})
-*/
 
 
 

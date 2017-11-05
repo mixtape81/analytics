@@ -4,10 +4,34 @@ let bookshelf = require('bookshelf')(knex);
 const { song_daily_views } = require('./models.js');
 const Promise = require('bluebird');
 const { testfile } = require('./constants.js');
+const fs = require('fs');
+const _ = require('lodash');
 
-song_daily_views.copyByOrder('songs', testfile, 1, 0)
+console.log(new Date())
+song_daily_views.copyByOrder('songs', testfile, 10, 1)
+.then(() => {
+  console.log(new Date())
+  //fs.readFile('./testcsv.csv', (res) => console.log(res))
+})
 
-
+var hash = {};
+song_daily_views.orderBy('songs', 1000000, 0) 
+.then(results => {
+  results.rows.forEach(row => {
+    if (hash[row.song_id]) {
+      hash[row.song_id].views += row.views;
+      hash[row.song_id].skips += row.skips;
+    } else { 
+      hash[row.song_id] = {
+        views: row.views,
+        skips: row.skips
+      }
+    }
+  })
+})
+.then(() => {
+  console.log(new Date(), hash)
+})
 
 /*
 console.log(new Date())
