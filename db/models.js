@@ -21,10 +21,10 @@ const songExtension = [
       }).save()
       .catch(err => console.log('error saving song:', err));
     },
-    historyByType(type = 'songs', id, limit = 30, offset = 0) { // set "limit" to null to find all
+    historyByType(type = 'songs', selectors, id, limit = 30, offset = 0) { // set "limit" to null/0 to find all
       type === 'songs' ? type = 'song_id' : type = 'playlist_id';
       return knex.raw( ` 
-        select * 
+        select ${selectors} 
         from song_daily_views 
         where ${type} = ? 
         order by created_at desc 
@@ -33,14 +33,14 @@ const songExtension = [
         [id, limit, offset]
       ).catch(err => console.log(err));
     },
-    orderBy(type = 'songs', limit = null, offset = 0) {
+    orderBy(type = 'songs', limit = 0, offset = 0) {
       if (type === 'playlists') {
         type = 'playlist_id';
       } else {
         type = 'song_id';
       }
       return knex.raw(`
-        select * 
+        select song_id, playlist_id, views, skips, created_at 
         from song_daily_views
         order by ${type}
         limit ${limit}
@@ -63,6 +63,14 @@ const songExtension = [
         to '${file}'
         with csv delimiter ',';`
       ).catch(err => console.log(err));
+    },
+    count() {
+      return knex.raw(`
+        select count(*) from song_daily_views;
+      `)
+      .then((knex) => {
+        return knex.rows[0].count;
+      })
     }
   }
 ];
