@@ -2,7 +2,7 @@ const config = require('./config.js');
 let knex = require('knex')(config);
 let bookshelf = require('bookshelf')(knex);
 const { song_daily_views } = require('./models.js');
-const { songRecommendation } = require('./controller');
+const { songHistoryPretty } = require('./controller');
 const Promise = require('bluebird');
 const { testfile } = require('./constants.js');
 const fs = require('fs');
@@ -238,26 +238,67 @@ async function FileMap(maxFetch = 1000000) {
   }).then(() => results);
 }
 
-function recommendSong(playlist_id) {
-  FileMap().then(map => {
-    return songRecommendation(playlist_id)
+function viewSkipMetrics(FileMap, playlist_id) {
+  return Promise.resolve(FileMap === 'function' ? FileMap() : FileMap)
+  .then(map => {
+    return songHistoryPretty(playlist_id)
     .then(songs => {
-      // look up the song in the map; 
+      var views = {};
+      views.most = 0;
+      views.least = Infinity;
+      var skips = {};
+      skips.most = 0;
+      skips.least = Infinity;
+
       songs.forEach(song => {
-        var prev;
         for (let last in map) {
-          console.log(song.song_id)
           if (-1 * song.song_id >= -1 * last) {
-            console.log(map[last].data[song.song_id]);
+            songData = map[last].data[song.song_id]
+            if (songData) {
+              if (songData.views > views.most) {
+                views.most = songData.views;
+                views.mostID = song.song_id;
+              } else if (songData.views < views.least) {
+                views.least = songData.views;
+                views.leastID = song.song_id;
+              }
+              if (songData.skips > skips.most) {
+                skips.most = songData.skips;
+                skips.mostID = song.song_id;
+              } else if (songData.skips < skips.least) {
+                skips.least = songData.skips;
+                skips.leastID = song.song_id;
+              }
+            }
           }
-          prev = last;
-        }
-        
-      })
+        }   
+      });
+      return Promise.resolve({
+        viewMetrics: views,
+        skipMetrics: skips
+      });
     })
   })
 }
-recommendSong(1);
+console.log(new Date())
+// takes 4 minutes;
+function findHighestMetricsAllPlaylists(totalPlaylists = 200) {
+  return FileMap()
+  .then((map) => {
+    var ids = [];
+    for (var playlist_id = 1; playlist_id <= totalPlaylists; playlist_id++) {
+      ids.push(playlist_id);
+    }
+    return Promise.mapSeries(ids, (playlist_id) => {
+      return viewSkipMetrics(map, playlist_id)
+    })
+    .then(playlists => {
+      console.log(playlists)
+    })
+  })
+}
+findHighestMetricsAllPlaylists().then(() => console.log(new Date()))
+
 
 /*
 knex.raw(`select created_at from song_daily_views limit 2;`)

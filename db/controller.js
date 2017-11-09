@@ -87,10 +87,9 @@ module.exports.saveSongs = function(songsToImport, time) {
   .catch(err => reject(err));
 }
 
-module.exports.songRecommendation = function(playlist_id) {
+module.exports.songHistoryPretty = function(playlist_id) {
   return song_daily_views.historyByType('playlist', ['song_id'], playlist_id)
   .then(recentSongs => {
-    recentSongs = recentSongs.rows;
-    return recentSongs;
+    return recentSongs.rows;
   })
 }
