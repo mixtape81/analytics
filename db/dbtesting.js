@@ -282,7 +282,7 @@ function viewSkipMetrics(FileMap, playlist_id) {
 }
 console.log(new Date())
 // takes 4 minutes;
-function findHighestMetricsAllPlaylists(totalPlaylists = 200) {
+async function findHighestMetricsAllPlaylists(totalPlaylists = 200) {
   return FileMap()
   .then((map) => {
     var ids = [];

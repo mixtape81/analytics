@@ -298,4 +298,3 @@ async function findHighestMetricsAllPlaylists(totalPlaylists = 200) {
   })
 }
 findHighestMetricsAllPlaylists().then(() => console.log(new Date()))
-
