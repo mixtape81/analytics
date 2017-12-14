@@ -37,8 +37,8 @@ describe('condensePlaylists', function() {
 describe('/addPlaylist', function() {
   beforeEach(function(done) {
     knex.schema.dropTableIfExists('song_daily_views') 
-    .then(() => knex.schema.dropTableIfExists('playlist_id_metrics')) 
-    .then(() => knex.schema.dropTableIfExists('pl_daily_views'))
+    .then(() => knex.schema.dropTableIfExists('playlist_id_metrics'));
+    .then(() => knex.schema.dropTableIfExists('pl_daily_views'));
     .then(() => createTables())
     .then(() => done()); 
   });

@@ -86,3 +86,10 @@ module.exports.saveSongs = function(songsToImport, time) {
   .then(results => console.log('saved at', new Date()))
   .catch(err => reject(err));
 }
+
+module.exports.songHistoryPretty = function(playlist_id) {
+  return song_daily_views.historyByType('playlist', ['song_id'], playlist_id)
+  .then(recentSongs => {
+    return recentSongs.rows;
+  })
+}

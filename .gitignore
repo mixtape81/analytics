@@ -41,3 +41,14 @@ package-lock.json
 
 # database config
 db/config.js
+
+# constants
+db/constants.js
+
+# processed data
+db/dataRetrieved.csv
+db/testcsv.csv
+db/dbtesting.js
+
+# logstash config
+/db/logstash.config 
