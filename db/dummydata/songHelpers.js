@@ -1,6 +1,6 @@
 const { playlist_id_metrics, song_daily_views } = require('../models.js');
 let { numAndHalfRandomizer, playlistNumber, songsPerPlaylist } = require('./helpers.js');
-const TotalSongs = 10000000
+const TotalSongs = 10000000;
 
 function quadExcRand(num) {
 	return Math.ceil(num + Math.random() * num) * num;
@@ -16,13 +16,11 @@ function inclusiveRand(num) {
 module.exports.createDailySongs = function() {
   var j = 1;
   var max = songsPerPlaylist;
-
   function hashNumSelector(num) {
   	var hasher = [quadExcRand(num), num, num, num, num]
     var selector = Math.floor(Math.random() * hasher.length)
     return hasher[selector];
   }
-  
   var incomingSongs = [];
   for (let i = 1; i <= playlistNumber; i++) {
   	let playlist = {
@@ -41,5 +39,4 @@ module.exports.createDailySongs = function() {
   	incomingSongs.push(playlist);
   }
   return incomingSongs;
-
 };

@@ -7,26 +7,18 @@ const { condensePlaylists } = require('./helpers.js');
 const { savePlaylists } = require('../db/controller.js');
 const Promise = require('bluebird');
 const dummy = require('./dummyData.js');
+let axios = require('axios');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
-app.get('/', (req, res) => {
-  console.log('hello');
-});
-
-
 // request from user interactions
-// to be ran every day 
 app.get('/playlistviews', (req, res) => {
-	//chunk process ?
-	//save incoming playlists 
 	new Promise((resolve) => {
-    //return req.body
+    // req.body
     return resolve(dummy);
 	})
 	.then((incoming) => {
-		//console.log(incoming)
     return condensePlaylists(incoming.incomingPlaylists);
 	}) 
 	.then((playlistsToSave) => {
@@ -36,23 +28,19 @@ app.get('/playlistviews', (req, res) => {
   .catch((err) => res.json('error saving condensed playlists', err))
 });
 
-
-/*
-// *do genre specific playlists get more plays on a given week than mixed-genre playlists
- 
-
-
-*/
 app.get('/playlistHistory', (req, res) => {
-
   //req.body.id
   var id = 1;
   pl_daily_views.playlistHistory(id)
   .then((history) => {
   	res.json(history)
   });
-
 });
+
+app.get('/', () => {
+  axios.get('http://127.0.0.1:9200/')
+  .then((res) => console.log(res.body))
+})
 
 module.exports.listening = app.listen(PORT, () => {
 	console.log(`listening on port ${PORT}`);

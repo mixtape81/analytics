@@ -2,11 +2,13 @@ const Promise = require('bluebird');
 const { createAndSavePlaylists } = require('./dummydata/index.js');
 var { createDailySongs } = require('./dummydata/songHelpers.js');
 var { saveSongs } = require('./controller.js');
-
+const { pl_daily_views, playlist_id_metrics, song_daily_views } = require('./models.js');
+const fs = require('fs'); 
+const { testfile } = require('./constants.js')
+ 
 let { TotalCycles, maxSavesPerRound, timeoutPerSave, timeoutData } = require('./dummydata/helpers.js'); 
 let hour = 0;
 let multiplier = 1;
-
 
 // timeoutPerSave based on 50 playlists;
 function timeoutCollectionInt(collector, func) {
@@ -28,7 +30,6 @@ function timeoutCollectionInt(collector, func) {
   }, timeoutPerSave);
 }
 //timeoutCollectionInt(hour.toString(), createAndSavePlaylists);
-
 
 var songsToSave = createDailySongs();
 var timeoutinfo = timeoutData('songs');
@@ -55,6 +56,8 @@ function timeoutSongInt(collector, func, param) {
     }
   }, timeoutPerSave);
 }
-timeoutSongInt(hour.toString(), saveSongs, songsToSave)
+//timeoutSongInt(hour.toString(), saveSongs, songsToSave)
+
+
 
 

@@ -1,6 +1,6 @@
 # Project Name
 
-The project description
+Analytics for mock spotify 
 
 ## Roadmap
 
@@ -25,15 +25,11 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for contribution guidelines.
 ## Requirements
 
 - Node 6.9.x
-- Redis 3.2.x
 - Postgresql 9.6.x
-- etc
 
 ## Other Information
 
-(TODO: fill this out with details about your project. Suggested ideas: architecture diagram, schema, and any other details from your app plan that sound interesting.)
-
-Objective 1: update songs per playlist id 
+Integrate recommendation with other microservices
 
 ## SCHEMAS
 **pl_daily_views**
