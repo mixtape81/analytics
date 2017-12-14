@@ -51,4 +51,7 @@ db/testcsv.csv
 db/dbtesting.js
 
 # logstash config
-/db/logstash.config 
+db/logstash.config
+
+#aws 
+server/awsAccessKeys.js 
